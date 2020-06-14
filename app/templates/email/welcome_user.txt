@@ -1,0 +1,6 @@
+Hello {{user.username}}
+Welcome to Blogz!!
+We have just seen you have signed up for our application and want to welcome you to the family.
+Enjoy using the application and incase of any issues to hesitate to contact us.
+
+Blogz Team.
