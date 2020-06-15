@@ -42,32 +42,18 @@ def category(cat):
 @login_required
 def comments(id):
     blog = Blog.query.filter_by(id = id).first()
-    pitch.upvote = 0
-    pitch.downvote = 0
     form = AddComment()
-    upvote = UpVote()
-    downvote = DownVote()
     if form.validate_on_submit():
         comment = form.comment.data
 
         new_comment = Comments(comment = comment,pitch_id = pitch.id, user = current_user)
 
         new_comment.save_comment()
-        return redirect(url_for('main.comments',id = pitch.id))
+        return redirect(url_for('main.comments',id = blog.id))
 
-    if upvote.validate_on_submit() and upvote.upvote.data:
-        pitch.upvote+=1
-        db.session.commit()
-        return redirect(url_for('main.comments',id = pitch.id))
-
-    elif downvote.validate_on_submit() and downvote.downvote.data:
-        pitch.downvote+=1
-        db.session.commit()
-        return redirect(url_for('main.comments',id = pitch.id))
-
-    comments = Comments.query.filter_by(pitch_id = id).order_by(Comments.date.desc())
+    comments = Comments.query.filter_by(blog_id = id).order_by(Comments.date.desc())
     title = 'Comments'
-    return render_template('comments.html',pitch = pitch, title= title,form = form, comments = comments, upvote = upvote, downvote = downvote)
+    return render_template('comments.html',blog = blog, title= title,form = form, comments = comments)
 
 @main.route('/user/<uname>')
 def profile(uname):
