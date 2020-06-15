@@ -1,1 +1,18 @@
 {% extends 'base.html'%}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+<div class="container-fluid">
+<div class="row">
+   {% for pitch in pitches %}
+   <div class="pitch col-md-6" >
+      <b>{{pitch.title}}.</b> <br><br>
+      <p>{{pitch.pitch}}</p>
+      <a href="/pitch/{{pitch.id}}/comments" class="btn btn-dark btn-sm">Comment</a>
+   </div>
+   {% endfor %}
+</div>
+</div>
+
+{% endblock %}
