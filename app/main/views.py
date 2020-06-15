@@ -1,8 +1,8 @@
-from flask_login import login_required
+from flask_login import login_required,current_user
 from flask import render_template,request,redirect,url_for,abort
 from . import main
-from ..models import User,Blog
-from .forms import UpdateProfile,AddBlog
+from ..models import User,Blog,Comments
+from .forms import UpdateProfile,AddBlog,AddComment
 from .. import db,photos
 
 @main.route('/')
@@ -46,7 +46,7 @@ def comments(id):
     if form.validate_on_submit():
         comment = form.comment.data
 
-        new_comment = Comments(comment = comment,pitch_id = pitch.id, user = current_user)
+        new_comment = Comments(comment = comment,blog_id = blog.id, user = current_user)
 
         new_comment.save_comment()
         return redirect(url_for('main.comments',id = blog.id))
