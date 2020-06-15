@@ -1,0 +1,14 @@
+{% macro displayCategory(categories) %}
+
+    <div class="container-fluid">
+        <div class="row">
+           {% for category in categories %}
+           <div class="pitch col-md-6" >
+              <b>{{category.title}}.</b> <br><br>
+              <p>{{category.pitch}}</p>
+           </div>
+           {% endfor %}
+        </div>
+        </div>        
+
+{% endmacro %}

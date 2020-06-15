@@ -30,7 +30,7 @@ def new_blog():
         return redirect(url_for('main.index'))
         
     title = 'New Blog'
-    return render_template('pitch_form.html', title= title,form = form)
+    return render_template('new_post.html', title= title,form = form)
 
 @main.route('/category/<string:cat>')
 @login_required
