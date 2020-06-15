@@ -1,5 +1,6 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash,check_password_hash
+from datetime import datetime
 from . import login_manager
 from . import db
 
@@ -17,6 +18,7 @@ class User(UserMixin, db.Model):
     profile_pic_path = db.Column(db.String())
     role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
     blogs = db.relationship('Blog',backref = 'role',lazy="dynamic")
+    comments = db.relationship('Comments',backref = 'role',lazy="dynamic")
 
     @property
     def password(self):
@@ -48,10 +50,30 @@ class Blog(db.Model):
 
     id = db.Column(db.Integer,primary_key = True)
     title = db.Column(db.String(255))
-    post = db.Column(db.String)
+    blog = db.Column(db.String)
     date = db.Column(db.DateTime,default = datetime.utcnow)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+    comments = db.relationship('Comments',backref = 'role',lazy="dynamic")
+
+    def save_blog(self):
+        db.session.add(self)
+        db.session.commit()
 
     def __repr__(self):
         return f'User {self.title}'
 
+class Comments(db.Model):
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer,primary_key = True)
+    comment = db.Column(db.String(2000))
+    date = db.Column(db.DateTime,default = datetime.utcnow)
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+    blog_id = db.Column(db.Integer,db.ForeignKey("blogs.id"))
+
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def __repr__(self):
+        return f'User {self.comment}'
