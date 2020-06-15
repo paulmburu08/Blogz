@@ -1,8 +1,8 @@
 from flask_login import login_required
 from flask import render_template,request,redirect,url_for,abort
 from . import main
-from ..models import User
-from .forms import UpdateProfile
+from ..models import User,Blog
+from .forms import UpdateProfile,AddBlog
 from .. import db,photos
 
 @main.route('/')
@@ -10,8 +10,64 @@ from .. import db,photos
 def index():
 
     title = 'BLOGZ'
+    blogs = Blog.query.order_by(Blog.date.desc())
 
-    return render_template('index.html', title = title)
+    return render_template('index.html', title = title, blogs = blogs)
+
+@main.route('/newblog',methods = ['GET','POST'])
+@login_required
+def new_blog():
+
+    form = AddBlog()
+    if form.validate_on_submit():
+        title = form.title.data
+        blog = form.blog.data
+        category = form.category.data
+
+        new_blog = Blog(title = title, blog = blog,category = category, user = current_user)
+
+        new_blog.save_blog()
+        return redirect(url_for('main.index'))
+        
+    title = 'New Blog'
+    return render_template('pitch_form.html', title= title,form = form)
+
+@main.route('/category/<string:cat>')
+@login_required
+def category(cat):
+    blogs = Blog.query.filter_by(category = cat).order_by(Blog.date.desc())
+    return render_template('category.html', blogs = blogs)
+
+@main.route('/blog/<int:id>/comments',methods = ['GET','POST'])
+@login_required
+def comments(id):
+    blog = Blog.query.filter_by(id = id).first()
+    pitch.upvote = 0
+    pitch.downvote = 0
+    form = AddComment()
+    upvote = UpVote()
+    downvote = DownVote()
+    if form.validate_on_submit():
+        comment = form.comment.data
+
+        new_comment = Comments(comment = comment,pitch_id = pitch.id, user = current_user)
+
+        new_comment.save_comment()
+        return redirect(url_for('main.comments',id = pitch.id))
+
+    if upvote.validate_on_submit() and upvote.upvote.data:
+        pitch.upvote+=1
+        db.session.commit()
+        return redirect(url_for('main.comments',id = pitch.id))
+
+    elif downvote.validate_on_submit() and downvote.downvote.data:
+        pitch.downvote+=1
+        db.session.commit()
+        return redirect(url_for('main.comments',id = pitch.id))
+
+    comments = Comments.query.filter_by(pitch_id = id).order_by(Comments.date.desc())
+    title = 'Comments'
+    return render_template('comments.html',pitch = pitch, title= title,form = form, comments = comments, upvote = upvote, downvote = downvote)
 
 @main.route('/user/<uname>')
 def profile(uname):
