@@ -85,5 +85,15 @@ class Subscribe(db.Model):
     id = db.Column(db.Integer,primary_key = True)
     email = db.Column(db.String)
 
+    def save_subscriber(self):
+        db.session.add(self)
+        db.session.commit()
+
     def __repr__(self):
         return f'User {self.email}'
+
+class Quote:
+    def __init__(self,author,id,quote):
+        self.author = author
+        self.id = id
+        self.quote = quote

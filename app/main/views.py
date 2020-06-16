@@ -1,9 +1,10 @@
 from flask_login import login_required,current_user
 from flask import render_template,request,redirect,url_for,abort,flash
 from . import main
-from ..models import User,Blog,Comments
-from .forms import UpdateProfile,AddBlog,AddComment,Delete
+from ..models import User,Blog,Comments,Subscribe
+from .forms import UpdateProfile,AddBlog,AddComment,AddSubscribers
 from .. import db,photos
+from ..email import mail_message
 
 @main.route('/')
 @login_required
@@ -27,6 +28,15 @@ def new_blog():
         new_blog = Blog(title = title, blog = blog,category = category, user = current_user)
 
         new_blog.save_blog()
+
+        mail_list = []
+        subscribers = Subscribe.query.order_by(Subscribe.id.desc())
+        for subscriber in subscribers:
+            mail_list.append(subscriber.email)
+
+        for mail in mail_list:
+             mail_message("NEW POST!","email/new_post",mail,mail =mail)
+
         return redirect(url_for('main.index'))
         
     title = 'New Blog'
@@ -167,3 +177,24 @@ def update_pic(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('main.profile',uname=uname))
+
+@main.route('/subscribe',methods = ['GET','POST'])
+def subscribe():
+    form = AddSubscribers()
+
+    if form.validate_on_submit():
+        subscriber = form.email.data
+
+        new_subscriber = Subscribe(email = subscriber)
+
+        new_subscriber.save_subscriber()
+
+        mail_list = []
+        mail_list.append(new_subscriber.email)
+
+        for mail in mail_list:
+            mail_message('Subscription to Blogz.','email/new_subscriber',mail,subscribe=subscribe)
+
+        return redirect(url_for('main.index'))
+
+    return render_template('subscribe.html',form = form)

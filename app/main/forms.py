@@ -17,5 +17,8 @@ class AddComment(FlaskForm):
     comment = TextAreaField('Comment')
     submit = SubmitField('Submit')
 
-class Delete(FlaskForm):
-    submit = SubmitField('Delete')
+class AddSubscribers(FlaskForm):
+
+    email =  StringField('E-mail', validators=[Required()])
+    submit = SubmitField('Submit')    
+
