@@ -4,8 +4,6 @@
 {% block content %}
 <div class="container-fluid">
     <div>
-        
-        <img class="rounded-circle article-img" src="{{url_for('static',filename='blog.user.profile_pic_path')}}">
         {{ blog.user.username }}
         <b>{{blog.title}}.</b> <br><br>
         <p>{{blog.blog}}</p>
@@ -19,7 +17,7 @@
     </div><br><br>
     {% for comment in comments %}
     <p class="comments">{{comment.comment}}</p>
-    {% if comment.user == current_user %}
+    {% if blog.user == current_user %}
     <button class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
     {% endif %}
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -33,13 +31,13 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <form action="{{ url_for('main.delete_comment', id = comment.id) }}" method="POST">
+              <form action="{{ url_for('main.delete_comment',comment_id = comment.id,id = comment.blog_id) }}" method="POST">
                  <input class="btn btn-danger" type="submit" value="Delete">
               </form>
             </div>
           </div>
         </div>
       </div>
-    {% endfor %}
+      {% endfor %}
 </div>
 {% endblock %}

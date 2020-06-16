@@ -67,7 +67,6 @@ def update_cat_post(id,category):
         blog.blog = form.blog.data
         blog.title = form.title.data
         db.session.commit()
-        flash('Your post has been updated!','success')
         return redirect(url_for('main.cat_comments',id = blog.id,category= blog.category))
 
     elif request.method =='GET': 
@@ -104,7 +103,6 @@ def update_post(id):
         blog.blog = form.blog.data
         blog.title = form.title.data
         db.session.commit()
-        flash('Your post has been updated!','success')
         return redirect(url_for('main.index',id = blog.id))
 
     elif request.method =='GET': 
@@ -120,19 +118,16 @@ def delete_post(id):
         abort(403)
     db.session.delete(blog)
     db.session.commit()
-    flash('Your post has been deleted!','success')
     return redirect(url_for('main.index',id = blog.id))
 
-@main.route('/blog/<int:id>/comments/deletecomment',methods = ['POST'])
+@main.route('/blog/<int:id>/comments/deletecomment/<int:comment_id>',methods = ['POST'])
 @login_required
-def delete_comment(id):
-    comment = Comments.query.get_or_404(id)
-    if comment.user != current_user:
-        abort(403)
+def delete_comment(comment_id,id):
+    blog = Blog.query.filter_by(id = id).first()
+    comment = Comments.query.filter_by(id = comment_id).first()
     db.session.delete(comment)
     db.session.commit()
-    flash('Your comment has been deleted!','success')
-    return redirect(url_for('main.comments',id = comment.id))
+    return redirect(url_for('main.comments',id = blog.id))
 
 @main.route('/user/<uname>')
 def profile(uname):
