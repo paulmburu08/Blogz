@@ -1,14 +1,39 @@
-{% macro displayCategory(categories) %}
+{% macro displayCategory(blogs) %}
 
     <div class="container-fluid">
         <div class="row">
-           {% for category in categories %}
+         {% for blog in blogs %}
            <div class="col-md-6" >
-              {{ category.user.username }}
-              <b>{{category.title}}.</b> <br><br>
-              <p>{{category.blog}}</p>
-              <a href="/category/{{category.category}}/category/{{category.id}}/comments" class="btn btn-dark btn-sm">Comment</a>
-            </div>
+              {{ blog.user.username }}
+              <b>{{blog.title}}.</b> <br><br>
+              <p>{{blog.blog}}</p>
+              <a href="/category/{{blog.category}}/category/{{blog.id}}/comments" class="btn btn-dark btn-sm">Comment</a>
+              {% if blog.user == current_user %}
+               <div>
+                  <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('main.update_cat_post', id = blog.id, category = blog.category ) }}">Update</a>
+                  <button class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+               </div>   
+              {% endif %}
+            </div><!-- Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+               <div class="modal-dialog" role="document">
+                 <div class="modal-content">
+                   <div class="modal-header">
+                     <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                     </button>
+                   </div>
+                   <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                     <form action="{{ url_for('main.delete_cat_post', id = blog.id, category = blog.category) }}" method="POST">
+                        <input class="btn btn-danger" type="submit" value="Delete">
+                     </form>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
            {% endfor %}
         </div>
         </div>        

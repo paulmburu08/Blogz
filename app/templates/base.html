@@ -7,6 +7,8 @@
 <!-- style block -->
 {% block styles%}
     {{ super() }}
+    <script src="https://use.fontawesome.com/c6c3a50631.js"></script>
+    {{ super() }}
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     {{ super() }}
     <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">

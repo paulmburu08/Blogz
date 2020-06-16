@@ -1,9 +1,9 @@
 {% extends 'base.html'%}
-{% import 'macros.html' as macro %}
+{% import 'macros.html' as macro with context %}
 
 {% block content %}
-
+<div>
 {{ macro.displayCategory(blogs) }}
 
-
+</div>
 {% endblock %}

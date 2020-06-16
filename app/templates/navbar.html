@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="/"><b>BLOGZ</b></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -22,17 +22,17 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/newblog">New Post</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/subscribe">Subscribe</a>
-  </li>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/subscribe">Subscribe</a>
+      </li> 
     </ul>
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="nav navbar-nav navbar-right nav-item">
       {% if current_user.is_authenticated %}
-      <li><a href="{{url_for('main.profile',uname=current_user.username)}}" style="color:black;"><b>Profile</b></a></li>
-      <li><a href="{{url_for('auth.logout')}}" style="color:black;"><b>Sign out</b></a></li>
+      <li><a href="{{url_for('main.profile',uname=current_user.username)}}" style="color:white;"><b>Profile</b></a></li>
+      <li><a href="{{url_for('auth.logout')}}" style="color:white;"><b>Sign out</b></a></li>
       {% else %}
-      <li><a href="{{url_for('auth.login')}}" style="color: black;"><b>Sign in</b></a></li>
+      <li><a href="{{url_for('auth.login')}}" style="color:white;"><b>Sign in</b></a></li>
       {%endif%}
     </ul>
   </div>

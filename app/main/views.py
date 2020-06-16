@@ -5,15 +5,17 @@ from ..models import User,Blog,Comments,Subscribe
 from .forms import UpdateProfile,AddBlog,AddComment,AddSubscribers
 from .. import db,photos
 from ..email import mail_message
+from ..requests import get_quotes
 
 @main.route('/')
 @login_required
 def index():
 
+    quotes = get_quotes()
     title = 'BLOGZ'
     blogs = Blog.query.order_by(Blog.date.desc())
 
-    return render_template('index.html', title = title, blogs = blogs)
+    return render_template('index.html',quotes = quotes, title = title, blogs = blogs)
 
 @main.route('/newblog',methods = ['GET','POST'])
 @login_required
@@ -42,10 +44,10 @@ def new_blog():
     title = 'New Blog'
     return render_template('new_post.html', title= title,form = form)
 
-@main.route('/category/<string:cat>')
+@main.route('/category/<string:category>')
 @login_required
-def category(cat):
-    blogs = Blog.query.filter_by(category = cat).order_by(Blog.date.desc())
+def category(category):
+    blogs = Blog.query.filter_by(category = category).order_by(Blog.date.desc())
     return render_template('category.html', blogs = blogs)
 
 @main.route('/category/<string:category>/category/<int:id>/comments',methods = ['GET','POST'])
@@ -77,12 +79,12 @@ def update_cat_post(id,category):
         blog.blog = form.blog.data
         blog.title = form.title.data
         db.session.commit()
-        return redirect(url_for('main.cat_comments',id = blog.id,category= blog.category))
+        return redirect(url_for('main.category',id = blog.id,category= blog.category))
 
     elif request.method =='GET': 
         form.title.data = blog.title
         form.blog.data = blog.blog
-    return render_template('new_post.html', title=title ,form = form,)
+    return render_template('new_post.html', title=title ,form = form)
 
 @main.route('/blog/<int:id>/comments',methods = ['GET','POST'])
 @login_required
@@ -129,6 +131,16 @@ def delete_post(id):
     db.session.delete(blog)
     db.session.commit()
     return redirect(url_for('main.index',id = blog.id))
+
+@main.route('/category/<string:category>/category/<int:id>/comments/delete',methods = ['POST'])
+@login_required
+def delete_cat_post(id,category):
+    blog = Blog.query.filter_by(id = id).first()
+    if blog.user != current_user:
+        abort(403)
+    db.session.delete(blog)
+    db.session.commit()
+    return redirect(url_for('main.category',id = blog.id, category = blog.category))
 
 @main.route('/blog/<int:id>/comments/deletecomment/<int:comment_id>',methods = ['POST'])
 @login_required

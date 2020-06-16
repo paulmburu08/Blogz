@@ -4,6 +4,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://paul:pauldatabase@localhost/blogz'
     SECRET_KEY = os.environ.get('SECRET_KEY')
     UPLOADED_PHOTOS_DEST ='app/static/photos'
+    API = os.environ.get("API")
     #  email configurations
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
