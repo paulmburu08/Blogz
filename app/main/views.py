@@ -1,5 +1,5 @@
 from flask_login import login_required,current_user
-from flask import render_template,request,redirect,url_for,abort
+from flask import render_template,request,redirect,url_for,abort,flash
 from . import main
 from ..models import User,Blog,Comments
 from .forms import UpdateProfile,AddBlog,AddComment,Delete
@@ -51,13 +51,29 @@ def cat_comments(id,category):
         new_comment.save_comment()
         return redirect(url_for('main.cat_comments',id = blog.id,category= blog.category))
 
-    delete = Delete()
-    if form.validate_on_submit():
-        db.session.delete(blog)
-
     comments = Comments.query.filter_by(blog_id = id).order_by(Comments.date.desc())
     title = 'Comments'
-    return render_template('comments.html',blog = blog, title= title,form = form, comments = comments,delete = delete)
+    return render_template('comments.html',blog = blog, title= title,form = form, comments = comments)
+
+@main.route('/category/<string:category>/category/<int:id>/comments/update',methods = ['GET','POST'])
+@login_required
+def update_cat_post(id,category):
+    title = 'Update post'
+    blog = Blog.query.filter_by(id = id).first()
+    if blog.user != current_user:
+        abort(403)
+    form = AddBlog()
+    if form.validate_on_submit():
+        blog.blog = form.blog.data
+        blog.title = form.title.data
+        db.session.commit()
+        flash('Your post has been updated!','success')
+        return redirect(url_for('main.cat_comments',id = blog.id,category= blog.category))
+
+    elif request.method =='GET': 
+        form.title.data = blog.title
+        form.blog.data = blog.blog
+    return render_template('new_post.html', title=title ,form = form,)
 
 @main.route('/blog/<int:id>/comments',methods = ['GET','POST'])
 @login_required
@@ -75,6 +91,48 @@ def comments(id):
     comments = Comments.query.filter_by(blog_id = id).order_by(Comments.date.desc())
     title = 'Comments'
     return render_template('comments.html',blog = blog, title= title,form = form, comments = comments)
+
+@main.route('/blog/<int:id>/comments/update',methods = ['GET','POST'])
+@login_required
+def update_post(id):
+    title = 'Update post'
+    blog = Blog.query.filter_by(id = id).first()
+    if blog.user != current_user:
+        abort(403)
+    form = AddBlog()
+    if form.validate_on_submit():
+        blog.blog = form.blog.data
+        blog.title = form.title.data
+        db.session.commit()
+        flash('Your post has been updated!','success')
+        return redirect(url_for('main.index',id = blog.id))
+
+    elif request.method =='GET': 
+        form.title.data = blog.title
+        form.blog.data = blog.blog
+    return render_template('new_post.html', title=title ,form = form)
+
+@main.route('/blog/<int:id>/comments/delete',methods = ['POST'])
+@login_required
+def delete_post(id):
+    blog = Blog.query.filter_by(id = id).first()
+    if blog.user != current_user:
+        abort(403)
+    db.session.delete(blog)
+    db.session.commit()
+    flash('Your post has been deleted!','success')
+    return redirect(url_for('main.index',id = blog.id))
+
+@main.route('/blog/<int:id>/comments/deletecomment',methods = ['POST'])
+@login_required
+def delete_comment(id):
+    comment = Comments.query.get_or_404(id)
+    if comment.user != current_user:
+        abort(403)
+    db.session.delete(comment)
+    db.session.commit()
+    flash('Your comment has been deleted!','success')
+    return redirect(url_for('main.comments',id = comment.id))
 
 @main.route('/user/<uname>')
 def profile(uname):
