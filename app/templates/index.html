@@ -6,7 +6,7 @@
 <div class="container-fluid">
    <div class="row">
       {% for blog in blogs %}
-      <div class="card index-card col-md-6" >
+      <div class='blogs' >
          <p>{{ blog.user.username }}  {{ blog.date.strftime('%d %B, %Y %H:%M:%S') }}</p>
          <h4><b>{{blog.title}}.</h4></p>
          <p>{{blog.blog}}</p>
@@ -40,7 +40,7 @@
       {% endfor %}
       </div>
    </div>
-   <div class="card">
+   <div>
       {% for quote in quotes %}
 
          <p>{{ quote.author }} </p>
