@@ -1,15 +1,16 @@
 {% extends 'base.html'%}
-{% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
 
 <div class="container-fluid">
 <div class="row">
-   {% for pitch in pitches %}
+   {% for blog in blogs %}
    <div class="pitch col-md-6" >
-      <b>{{pitch.title}}.</b> <br><br>
-      <p>{{pitch.pitch}}</p>
-      <a href="/pitch/{{pitch.id}}/comments" class="btn btn-dark btn-sm">Comment</a>
+      {{ blog.user.username }}
+      <b>{{blog.title}}.</b> <br><br>
+      <p>{{blog.blog}}</p>
+      {{ blog.date}}
+      <a href="/blog/{{blog.id}}/comments" class="btn btn-dark btn-sm">Comment</a>
    </div>
    {% endfor %}
 </div>

@@ -2,7 +2,7 @@ from flask_login import login_required,current_user
 from flask import render_template,request,redirect,url_for,abort
 from . import main
 from ..models import User,Blog,Comments
-from .forms import UpdateProfile,AddBlog,AddComment
+from .forms import UpdateProfile,AddBlog,AddComment,Delete
 from .. import db,photos
 
 @main.route('/')
@@ -37,6 +37,27 @@ def new_blog():
 def category(cat):
     blogs = Blog.query.filter_by(category = cat).order_by(Blog.date.desc())
     return render_template('category.html', blogs = blogs)
+
+@main.route('/category/<string:category>/category/<int:id>/comments',methods = ['GET','POST'])
+@login_required
+def cat_comments(id,category):
+    blog = Blog.query.filter_by(id = id).first()
+    form = AddComment()
+    if form.validate_on_submit():
+        comment = form.comment.data
+
+        new_comment = Comments(comment = comment,blog_id = blog.id, user = current_user)
+
+        new_comment.save_comment()
+        return redirect(url_for('main.cat_comments',id = blog.id,category= blog.category))
+
+    delete = Delete()
+    if form.validate_on_submit():
+        db.session.delete(blog)
+
+    comments = Comments.query.filter_by(blog_id = id).order_by(Comments.date.desc())
+    title = 'Comments'
+    return render_template('comments.html',blog = blog, title= title,form = form, comments = comments,delete = delete)
 
 @main.route('/blog/<int:id>/comments',methods = ['GET','POST'])
 @login_required

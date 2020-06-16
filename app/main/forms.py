@@ -16,3 +16,6 @@ class AddComment(FlaskForm):
 
     comment = TextAreaField('Comment')
     submit = SubmitField('Submit')
+
+class Delete(FlaskForm):
+    submit = SubmitField('Delete')

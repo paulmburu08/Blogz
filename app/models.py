@@ -17,8 +17,8 @@ class User(UserMixin, db.Model):
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
     role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
-    blogs = db.relationship('Blog',backref = 'role',lazy="dynamic")
-    comments = db.relationship('Comments',backref = 'role',lazy="dynamic")
+    blogs = db.relationship('Blog',backref = 'user',lazy="dynamic")
+    comments = db.relationship('Comments',backref = 'user',lazy="dynamic")
 
     @property
     def password(self):
@@ -51,9 +51,10 @@ class Blog(db.Model):
     id = db.Column(db.Integer,primary_key = True)
     title = db.Column(db.String(255))
     blog = db.Column(db.String)
+    category = db.Column(db.String)
     date = db.Column(db.DateTime,default = datetime.utcnow)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
-    comments = db.relationship('Comments',backref = 'role',lazy="dynamic")
+    comments = db.relationship('Comments',backref = 'blog',lazy="dynamic")
 
     def save_blog(self):
         db.session.add(self)

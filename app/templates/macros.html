@@ -3,10 +3,12 @@
     <div class="container-fluid">
         <div class="row">
            {% for category in categories %}
-           <div class="pitch col-md-6" >
+           <div class="col-md-6" >
+              {{ category.user.username }}
               <b>{{category.title}}.</b> <br><br>
-              <p>{{category.pitch}}</p>
-           </div>
+              <p>{{category.blog}}</p>
+              <a href="/category/{{category.category}}/category/{{category.id}}/comments" class="btn btn-dark btn-sm">Comment</a>
+            </div>
            {% endfor %}
         </div>
         </div>        
