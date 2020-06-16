@@ -93,7 +93,6 @@ class Subscribe(db.Model):
         return f'User {self.email}'
 
 class Quote:
-    def __init__(self,author,id,quote):
+    def __init__(self,author,quote):
         self.author = author
-        self.id = id
         self.quote = quote
