@@ -5,7 +5,7 @@ A personal blogging website where you can create and share your opinions and oth
 {paulmburu08}https://github.com/paulmburu08
 
 # Live link
-
+https://paulblogz.herokuapp.com/
 
 # Description
 As a User you will be able to:
