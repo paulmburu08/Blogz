@@ -3,23 +3,26 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div>
-        {{ blog.user.username }}
-        <b>{{blog.title}}.</b> <br><br>
-        <p>{{blog.blog}}</p>
-        {{ blog.date.strftime('%Y-%m-%d') }}
-
+    <div class="card card1">
+      <p>{{ blog.user.username }}</p>
+      <h4 class="heading">{{blog.title}}.</h4>
+      <p>{{blog.blog}}</p>
+      <p class="time">{{ blog.date.strftime('%d %B, %Y %H:%M:%S') }}</p>
     </div>
-    <div class="comment">
+    <div class="card card1">
+      <div class="comment">
 
-        {{ wtf.quick_form(form) }}
+          {{ wtf.quick_form(form) }}
 
-    </div><br><br>
-    {% for comment in comments %}
-    <p class="comments">{{comment.comment}}</p>
-    {% if blog.user == current_user %}
-    <button class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
-    {% endif %}
+      </div><br><br>
+    </div>
+      {% for comment in comments %}
+      <div class="card card1">
+      <p class="comments">{{comment.comment}}</p>
+      {% if blog.user == current_user %}
+      <button class="btn btn-danger btn-sm m-1 deleteComment" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+      {% endif %}
+      </div>
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">

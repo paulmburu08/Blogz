@@ -3,11 +3,12 @@
     <div class="container-fluid">
         <div class="row">
          {% for blog in blogs %}
-           <div class="col-md-6" >
-              {{ blog.user.username }}
-              <b>{{blog.title}}.</b> <br><br>
-              <p>{{blog.blog}}</p>
-              <a href="/category/{{blog.category}}/category/{{blog.id}}/comments" class="btn btn-dark btn-sm">Comment</a>
+           <div class="card col-md-6" >
+            <p>{{ blog.user.username }} </p>
+            <h4 class="heading">{{blog.title}}.</h4>
+            <p>{{blog.blog}}</p>
+            <p class="time">{{ blog.date.strftime('%d %B, %Y %H:%M:%S') }}</p>
+              <a href="/category/{{blog.category}}/category/{{blog.id}}/comments" class="btn btn-link btn-sm"><i class="fa fa-comment" aria-hidden="true"></i>Comment</a>
               {% if blog.user == current_user %}
                <div>
                   <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('main.update_cat_post', id = blog.id, category = blog.category ) }}">Update</a>

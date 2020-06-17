@@ -4,12 +4,22 @@
 {% block content %}
 
 <div class="container-fluid">
+   <div class="jumbotron">
+      <h3>QUOTES</h3>
+      {% for quote in quotes %}
+
+         <p class="heading">{{ quote.author }} </p>
+         <p>{{ quote.quote }} </p>
+
+      {% endfor %}
+   </div>
    <div class="row">
       {% for blog in blogs %}
-      <div class='blogs' >
-         <p>{{ blog.user.username }}  {{ blog.date.strftime('%d %B, %Y %H:%M:%S') }}</p>
-         <h4><b>{{blog.title}}.</h4></p>
+      <div class='card card2 col-md-6' >
+         <p>{{ blog.user.username }}</p>
+         <h4 class="heading">{{blog.title}}.</h4>
          <p>{{blog.blog}}</p>
+         <p class="time">{{ blog.date.strftime('%d %B, %Y %H:%M:%S') }}</p>
          <a href="/blog/{{blog.id}}/comments" class="comment btn btn-link btn-sm m-1"><i class="fa fa-comment" aria-hidden="true"></i>Comment</a>
          {% if blog.user == current_user %}
             <div>
@@ -38,16 +48,7 @@
             </div>
          </div>
       {% endfor %}
-      </div>
    </div>
-   <div>
-      {% for quote in quotes %}
-
-         <p>{{ quote.author }} </p>
-         <p>{{ quote.quote }} </p>
-
-      {% endfor %}
-</div>
 </div>
 
 {% endblock %}

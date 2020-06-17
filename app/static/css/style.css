@@ -1,0 +1,53 @@
+body{
+    background-color: white;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.navbar-brand{
+    font-size: 30px;
+    font-family: 'Staatliches', cursive;
+}
+.subscribe{
+    width: 400px;
+    margin-left: 5px;
+}
+
+.card{
+    padding: 5px;
+}
+
+.jumbotron{
+    background-image: url(../img/img.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: rgb(0,0,0,.6);
+    background-blend-mode: overlay;
+    color: white;
+}
+
+.card1{
+    margin-bottom: 10px;
+}
+
+.comment{
+    width: 400px;
+}
+
+.deleteComment{
+    width: 70px;
+}
+
+.quotes{
+    display: inline-block;
+    text-align: center;
+    size: 50%;
+}
+
+.time{
+    font-family: 'Oswald', sans-serif;
+}
+
+.heading{
+    font-family: 'Montserrat', sans-serif;
+}
